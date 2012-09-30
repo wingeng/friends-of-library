@@ -1,0 +1,12 @@
+Sun 09/30/12
+------------
+
+Dependancies 
+  gem install json
+  gem install trollop
+  gem install asin
+  gem install camping
+  gem install hashie
+  gem install markaby
+  gem install marky
+  gem install sqlite3

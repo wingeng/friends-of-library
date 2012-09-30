@@ -16,3 +16,9 @@ tmp
 .yardoc
 _yardoc
 doc/
+
+# my local ignores
+asin-config.rb
+*.db
+junk/
+.DS_Store
