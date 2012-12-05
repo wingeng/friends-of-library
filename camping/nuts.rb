@@ -31,10 +31,16 @@ module Nuts::Controllers
         lup = `cd ..;./isbn-lookup.rb --api-mode #{@input.isbn} --insert`
         
         @output = JSON.parse(lup)
-        @title = @output[:title]
-        @price = @output.fetch("price", "$0.00")
-        @price_f = @price.gsub("$", "").to_f
-        @detail_page = @output.fetch("detail-page", "")
+        if @output.fetch("return-code", "false") == "false" then
+          puts "item not found"
+          @title = "Item not found - " + @isbn
+        else
+          puts "item  found"
+          @title = @output[:title]
+          @price = @output.fetch("price", "$0.00")
+          @price_f = @price.gsub("$", "").to_f
+          @detail_page = @output.fetch("detail-page", "")
+        end
       end
 
       render :isbnlook
@@ -114,7 +120,7 @@ module Nuts::Views
 
         div :id => "contentsection" do
           p do
-            span :class => "output", :id => "output-title"  do @output["title"]  end
+            span :class => "output", :id => "output-title"  do @title  end
           end
 
           p do
