@@ -32,11 +32,9 @@ module Nuts::Controllers
         
         @output = JSON.parse(lup)
         if @output.fetch("return-code", "false") == "false" then
-          puts "item not found"
           @title = "Item not found - " + @isbn
         else
-          puts "item  found"
-          @title = @output[:title]
+          @title = @output.fetch("title", "")
           @price = @output.fetch("price", "$0.00")
           @price_f = @price.gsub("$", "").to_f
           @detail_page = @output.fetch("detail-page", "")
