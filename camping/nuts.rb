@@ -23,7 +23,7 @@ module Nuts::Controllers
       @isbn = @input.fetch("isbn", "")
       @price = 
       @price_f = 0.0
-      @cutoff = @input.fetch("collections_cutoff", "20").to_i
+      @cutoff = @input.fetch("collections_cutoff", "40").to_i
       @detail_page = ""
 
       if (@input.has_key?("isbn")) then
