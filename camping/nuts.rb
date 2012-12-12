@@ -20,15 +20,15 @@ module Nuts::Controllers
     def do_isbn
       @output = ""
       @title = "Not found"
-      @isbn = @input.fetch("isbn", "")
+      @isbn = @input.fetch("isbn", "").gsub(/[^0-9]/, "")
       @price = 
       @price_f = 0.0
       @cutoff = @input.fetch("collections_cutoff", "40").to_i
       @detail_page = ""
 
       if (@input.has_key?("isbn")) then
-        
-        lup = `cd ..;./isbn-lookup.rb --api-mode #{@input.isbn} --insert`
+        lup = `cd ..;./isbn-lookup.rb --api-mode #{@isbn} --insert`
+puts "lup is " + lup
         
         @output = JSON.parse(lup)
         if @output.fetch("return-code", "false") == "false" then
