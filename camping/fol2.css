@@ -4,15 +4,17 @@
 
 body {
  margin-top: 50px;
+ margin: 30px;
  background-color: #6E8CB3;
  background-image: url('new_friends_back.jpg');
+# background-color: #466853;
+# background-color: #72937B;
 }
 
 #outersection {
  background-color: white;
  border-color: #FF3300;
  padding-top: 20px;
-  
  width: 750px;
  margin: 10 auto;
  border-radius: 16px;
@@ -20,22 +22,12 @@ body {
 
 #isbn {
  padding-left: 10px;
- border-bottom-style: groove;
- border-bottom-width: 1px;
- padding-bottom: 5px;
 }
 
-
-#imagesection {
- padding: 10px 10px;
- float:left;
- width:135px;
- height:500px;
-}
 
 #contentsection {
  padding-left: 5px;
- background-color: white;
+ background-color: #72937B;
  text-align: left;
  font-family: Verdana, Arial, Helvetica, sans-serif;
  padding-bottom: 10px;
@@ -60,6 +52,64 @@ body {
   color: #ff0000;
 }
 	        
+
+#title {
+  color: black;
+}
+
+#media-list {
+  width: 95%;
+  margin-left: 20px;
+  font-size: larger;
+
+  padding: 10px;
+  padding-bottom: 20px;
+  vertical-align: top;
+}
+
+.title {
+  vertical-align: top;
+
+  padding-left: 10px;
+  padding-bottom: 1px;
+}
+
+#del-button {
+  vertical-align: top;
+  padding: 3px;
+}
+
+.row-odd {
+  background-color: #DCDCDD;
+}
+
+.row-even {
+  background-color: #F2F6FF;
+}
+
+#card {
+  background-color: white;
+  padding: 10px;
+  border-radius: 16px;
+}
+
+.header {
+  padding-left: 10px;
+}
+
+#header-line {
+  padding-bottom: 4px;
+  border-top-style: dashed;
+  border-width: 1px;
+  text-align: center;
+}
+
+#not-found {
+  color: red;
+  display: inline;
+  alignment: center;
+  text-align: center;
+}
 
 .tool-bar {
  padding-left: 20px;

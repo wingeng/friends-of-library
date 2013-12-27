@@ -19,6 +19,8 @@ doc/
 
 # my local ignores
 asin-config.rb
+smtp.config
 *.db
 junk/
 .DS_Store
+old-db

@@ -9,7 +9,7 @@ script = <<END
 
 attach "isbn.db" as db1;
 
-select * from isbn  where amazon_lowest_used_price != \'\' order by amazon_lowest_used_price;
+select * from isbn  where used_price != \'\' order by used_price;
 END
 
 puts `echo "#{script}" > /tmp/sql-dump-price.sql`

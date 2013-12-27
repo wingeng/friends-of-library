@@ -10,5 +10,7 @@ db = SQLite3::Database.new("isbn.db")
 
 db.execute("CREATE TABLE isbn (
                 timestamp time primary key,
-                isbn text,
-                amazon_lowest_used_price string);")
+                isbn text key,
+                used_price string,
+                title text,
+);")

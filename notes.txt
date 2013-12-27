@@ -1,3 +1,24 @@
+Thu 12/26/13
+------------
+
+to delete an isbn number
+  delete from isbn where isbn == '0356502759'";
+
+to clear the media-list
+sqlite3 isbn.db "update isbn set in_media = 0;"
+
+The notion of being in the media list, is encoded by the field
+in_media. A row is in the media list if the value is equaled to '1'.
+All other values are considered not in list.
+
+To clear the list we use the script 'clear_media-list.rb'.  This
+script sets all rows with in_media == 1 to the 'max(in_media) + 1'. 
+
+By doing this we have the property where we can undo previous to
+previous media-list by setting the 'in_media' field back to 1.
+(no redo tho)
+
+
 Sun 09/30/12
 ------------
 

@@ -17,15 +17,17 @@ ARGV[0] = "0765329042" if ARGV[0] == "example"
 
 include ASIN::Client
 
-def isbn_string(isbn_found, isbn, title = "", price = "", detail_page = "", image_set = "")
+def isbn_string(isbn_found, isbn, title = "", author = "", price = "", detail_page = "", image_set = "")
   if (Opts.api_mode)
     if (Opts.insert)
       `./isbn-insert.rb ./isbn.db #{isbn} #{price.gsub('$', '')}`
     end
+
     %Q{{
         "return-code" : "#{isbn_found}",
         "isbn" : "#{isbn}",
         "title" : "#{title}",
+        "author" : "#{author}",
         "price" : "#{price}",
         "detail-page" : "#{detail_page}",
         "image-url" : "#{image_set}"
@@ -99,6 +101,7 @@ def lup(isbn)
 
   item = items.first
   isbn_string(true, isbn, item.title.gsub(":", "-").chomp,
+              item.raw.ItemAttributes.Author,
               item.raw.OfferSummary.LowestUsedPrice.FormattedPrice,
               item.raw.DetailPageURL, item.raw.MediumImage.URL)
 
