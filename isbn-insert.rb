@@ -13,7 +13,6 @@ insert_media = '1' if ARGV.length > 2
 
 
 lup = `cd ~wing/work/friends-o-library;./isbn-lookup.rb --api-mode #{isbn_str}`
-
 record = JSON.parse(lup)
 
 if record.fetch("return-code", "false") != "false" then

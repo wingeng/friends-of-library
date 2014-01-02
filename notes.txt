@@ -1,3 +1,13 @@
+Wed 01/01/14
+------------
+sqlite, use limit to do pagination
+
+select * from isbn limit <start> <count>;
+
+use select max(*) from isbn; to get the total rows
+then divide by page_rows to get the number of pages.
+
+
 Thu 12/26/13
 ------------
 

@@ -92,9 +92,8 @@ module Nuts::Controllers
       @detail_page = ""
 
       if (@input.has_key?("isbn")) then
-        lup = `cd ..;./isbn-lookup.rb --api-mode #{@isbn} --insert`
-        puts "lup is " + lup
-        
+        lup =  `cd ..;./isbn-insert.rb isbn.db #{@isbn}`
+
         @output = JSON.parse(lup)
         if @output.fetch("return-code", "false") == "false" then
           @title = "Item not found - " + @isbn
