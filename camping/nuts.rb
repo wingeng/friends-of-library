@@ -22,6 +22,16 @@ module Nuts::Controllers
     end
   end
 
+  class SimpleList < R '/simple-list'
+    def get
+      s = "<pre>"
+      s += `cd ..;./simple-list.rb`
+      s += "</pre>"
+      s
+    end
+  end
+
+
   class MediaList < R '/media-list'
     def do_media_list
       @style_sheet = "fol2.css"
@@ -62,6 +72,8 @@ module Nuts::Controllers
       elsif @delete_value then
         @status_message = "Deleted: " + @delete_value
         `cd ..;./clear-media-list.rb #{@delete_value}`
+      elsif @simple_list then
+        
       else
         # Add ISBN to media list
         @status_message = " to fol: " + @isbn
@@ -159,6 +171,8 @@ module Nuts::Views
     div :class => "tool-bar" do
       a :class => "tool-bar", :href => "/" do "Scanner" end
       a :class => "tool-bar", :href => "/media-list" do "Media-List" end
+      a :class => "tool-bar", :href => "/simple-list" do "Simple-List" end
+      a :class => "tool-bar", :href => "http://67.241.77.38:4567/media-list.html" do "Alpha" end
     end
 
     div :id => "outersection" do
@@ -170,7 +184,7 @@ module Nuts::Views
               input :type => "text", :name => "isbn", :id => "isbn-text"
               input :type => "submit", :value => "Find", :name => "Find"
             end
-            td :class => "header", :width => "50%" do
+            td :class => "header", :width => "80%" do
               input :type => "submit", :value => "clear-list", :name => "Clear", :onClick => "clear_list_really()"
               input :type => "submit", :value => "e-mail", :name => "Email"
             end
@@ -203,8 +217,7 @@ module Nuts::Views
 
   def isbnlook
     div :class => "tool-bar" do
-      a :class => "tool-bar", :href => "/" do "Scanner" end
-      a :class => "tool-bar", :href => "/media-list" do "Media-List" end
+      a :class => "tool-bar", :href => "http://67.241.77.38:4567/media-list.html" do "Alpha" end
     end
 
     div :id => "outersection" do
