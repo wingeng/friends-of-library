@@ -172,7 +172,7 @@ module Nuts::Views
       a :class => "tool-bar", :href => "/" do "Scanner" end
       a :class => "tool-bar", :href => "/media-list" do "Media-List" end
       a :class => "tool-bar", :href => "/simple-list" do "Simple-List" end
-      a :class => "tool-bar", :href => "http://67.241.77.38:4567/media-list.html" do "Alpha" end
+      a :class => "tool-bar", :href => "http://bok-choi.com:4567/media-list.html" do "Alpha" end
     end
 
     div :id => "outersection" do
@@ -217,7 +217,7 @@ module Nuts::Views
 
   def isbnlook
     div :class => "tool-bar" do
-      a :class => "tool-bar", :href => "http://67.241.77.38:4567/media-list.html" do "Alpha" end
+      a :class => "tool-bar", :href => "http://bok-choi.com:4567/media-list.html" do "Alpha" end
     end
 
     div :id => "outersection" do
