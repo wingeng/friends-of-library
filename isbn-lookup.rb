@@ -158,35 +158,38 @@ def lup(isbn)
   end
 
   if (Opts.dump) then
-    dump(items.first.raw)
+    dump(items.first)
   end
 
   item = items.first
+  if (item == nil) then
+    return not_found(isbn)
+  end
 
-  if item.raw.OfferSummary.LowestUsedPrice then
-    price = item.raw.OfferSummary.LowestUsedPrice.FormattedPrice
-  else
+  begin
+    price = item.offer_summary.lowest_used_price.formatted_price
+  rescue
     price = "$0.00"
   end
 
-  if item.raw.MediumImage then
-    image_set = item.raw.MediumImage.URL
+  if item.medium_image then
+    image_set = item.medium_image.URL
   else
     image_set = ""
   end
 
-  author = one_of(item.raw.ItemAttributes.Author,
-                  item.raw.ItemAttributes.Artist,
-                  item.raw.ItemAttributes.Creator,
+  author = one_of(item.item_attributes.author,
+                  item.item_attributes.artist,
+                  item.item_attributes.creator,
                   "")
   rec = {}
-  rec[:title] = item.title.gsub(":", "-").gsub('"', "").chomp
+  rec[:title] = item.item_attributes.title.gsub(":", "-").gsub('"', "").chomp
   rec[:author] = author
   rec[:price] = price
-  rec[:detail_page] = item.raw.DetailPageURL
+  rec[:detail_page] = item.detail_page_url
   rec[:image_set] = image_set
-  rec[:date_of_publication] = one_of(item.raw.ItemAttributes.PublicationDate,
-                                     item.raw.ItemAttributes.ReleaseDate,
+  rec[:date_of_publication] = one_of(item.item_attributes.publication_date,
+                                     item.item_attributes.release_date,
                                      "date-not-found")
 
   isbn_string(true, isbn, rec)

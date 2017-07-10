@@ -1,3 +1,4 @@
+#!/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
 #!/usr/bin/ruby
 
 require 'rubygems'

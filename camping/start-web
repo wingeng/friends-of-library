@@ -1,4 +1,4 @@
 while true
 do
-    camping goes nuts.rb
+    camping -h 0.0.0.0 -p 3301 nuts.rb
 done
