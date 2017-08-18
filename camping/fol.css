@@ -60,7 +60,10 @@ body {
   text-decoration: blink;
   color: #ff0000;
 }
-	        
+
+#to-affiliate {
+ padding-left: 20px;
+}	        
 
 .tool-bar {
  padding-left: 20px;

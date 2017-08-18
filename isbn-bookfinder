@@ -1,0 +1,85 @@
+#!/usr/bin/python
+
+import re
+import pdb
+import sys
+from subprocess import Popen, PIPE
+
+def run (cmd, quiet = False):
+    p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
+    if not quiet:
+        print(cmd)
+        print("")
+
+    output = ""
+    while True:
+        s = p.stdout.readline()
+        if not quiet:
+            sys.stdout.write(s)
+            sys.stdout.flush()
+
+        output += s
+
+        if p.poll() != None:
+            break
+
+    return (p.returncode, output)
+
+def get_isbn_url(isbn):
+    url = "https://www.bookfinder.com/search/?"
+    url += "lang=en"
+    url += "&new_used=U"
+    url += "&destination=us"
+    url += "&currency=USD"
+    url += "&isbn=%s" % isbn
+    url += "&mode=advanced"
+    url += "&st=sr"
+    url += "&ac=qr"
+
+    return url
+
+def get_isbn_prices(isbn):
+    url = get_isbn_url(isbn)
+    cmd = "curl -s '%s' " % url
+    cmd += "| ruby -ne 'puts($1) if $_ =~ /data-price=\"([0-9\.]+)/'"
+    (rc, output) = run(cmd, True)
+
+    prices = []
+    try:
+        for p in output.split("\n"):
+            prices.append(float(p))
+    except:
+        pass
+
+    return prices
+
+def get_json_info(isbn):
+    prices = get_isbn_prices(isbn)
+
+    lowest_price = 0.0
+    if len(prices):
+        lowest_price = prices[0]
+        
+    json = '''
+    { "return-code" : "true",
+      "price": "$%2.2f",
+      "detail-page" : "%s"
+    }
+    ''' % (lowest_price, get_isbn_url(isbn))
+
+    return json
+        
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1:
+        isbn = sys.argv[1]
+        json = get_json_info(isbn)
+        print(json)
+    else:
+        print('{"return-code" : "false", "error-message" : "invalid arguments, need isbn"}')
+
+# Local Variables: 
+# mode: python
+# End:
+#

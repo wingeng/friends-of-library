@@ -103,6 +103,10 @@ module Nuts::Controllers
       @cutoff = @input.fetch("collections_cutoff", "20").to_i
       @detail_page = ""
 
+      @bk_price = @bk_price_f = 0.0
+      @bk_output = ""
+      @bk_detail_page = ""
+
       if (@input.has_key?("isbn")) then
         lup =  `cd ..;./isbn-insert.rb isbn.db #{@isbn}`
 
@@ -115,6 +119,18 @@ module Nuts::Controllers
           @price_f = @price.gsub("$", "").to_f
           @detail_page = @output.fetch("detail-page", "")
         end
+
+        if @price_f == 0.0 then
+          # Bookfinder prices
+          lup = `cd ..;./isbn-bookfinder #{@isbn}`
+          @bk_output = JSON.parse(lup)
+          if @bk_output.fetch("return-code", "false") == "true" then
+            @bk_price = @bk_output.fetch("price", "$0.00")
+            @bk_price_f = @bk_price.gsub("$", "").to_f
+            @bk_detail_page = @bk_output.fetch("detail-page", "")
+          end
+        end
+
       end
 
       render :isbnlook
@@ -258,20 +274,33 @@ module Nuts::Views
           end
 
           p do
-            span :class => "output", :id => "output-price"  do @output["price"]  end
+            span :class => "output", :id => "output-price"  do
+              @output["price"] 
+            end
+            
+            span :id => "to-affiliate" do
+              a :href => @detail_page do "amazon" end
+            end
           end
 
-          p do 
-            if (@price_f >= @cutoff.to_f)
-              div :id => "specials" do "To Specials" end
+          if @bk_price_f > 0.0 then
+            p do
+              span :class => "output", :id => "output-price" do
+                @bk_output["price"]
+              end
+
+              span :id => "to-affiliate" do
+                a :href => @bk_detail_page do "bookfinder" end
+              end
             end
           end
 
           p do 
-            a :href => @detail_page do "amazon" end
+            if (@price_f >= @cutoff.to_f || @bk_price_f >= @cutoff.to_f)
+              div :id => "specials" do "To Specials" end
+            end
           end
 
-          #      div do @input end
         end
       end
     end
