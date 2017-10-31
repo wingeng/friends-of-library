@@ -58,7 +58,7 @@ module Nuts::Controllers
     def post
       @email_list = @input.fetch("Email", "") != ""
       @clear_list = @input.fetch("Clear", "") != ""
-      @isbn = @input.fetch("isbn", "").gsub(/[^0-9]/, "")
+      @isbn = @input.fetch("isbn", "").gsub(/[^0-9Xx]/, "")
 
 
       @delete_value = get_delete
@@ -97,7 +97,7 @@ module Nuts::Controllers
       @style_sheet = "fol.css"
       @output = ""
       @title = "Not found"
-      @isbn = @input.fetch("isbn", "").gsub(/[^0-9]/, "")
+      @isbn = @input.fetch("isbn", "").gsub(/[^0-9Xx]/, "")
       @price = 
         @price_f = 0.0
       @cutoff = @input.fetch("collections_cutoff", "20").to_i
