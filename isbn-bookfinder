@@ -3,6 +3,7 @@
 import re
 import pdb
 import sys
+import json
 from subprocess import Popen, PIPE
 
 def run (cmd, quiet = False):
@@ -38,36 +39,53 @@ def get_isbn_url(isbn):
 
     return url
 
-def get_isbn_prices(isbn):
+def get_isbn_output(isbn):
     url = get_isbn_url(isbn)
-    cmd = "curl -s '%s' " % url
-    cmd += "| ruby -ne 'puts($1) if $_ =~ /data-price=\"([0-9\.]+)/'"
+    cmd = "curl --no-buffer -s '%s' " % url
+    cmd += "| ruby ./bookfinder-extractor"
     (rc, output) = run(cmd, True)
 
-    prices = []
-    try:
-        for p in output.split("\n"):
-            prices.append(float(p))
-    except:
-        pass
+    return output
 
-    return prices
+def log(s):
+    with open("/tmp/nuts.log", "a") as f:
+        f.write(str(s) + '\n')
 
 def get_json_info(isbn):
-    prices = get_isbn_prices(isbn)
+    isbn_json = get_isbn_output(isbn)
+    try:
+        j = json.loads(isbn_json)
+    except Exception as e:
+        log("Error parsing '%s'" % isbn_json)
+        log(e)
+        j = json.loads('''
+                {"return-code" : "true",
+                 "title" : "Couldn't find:",
+                 "author" : "",
+                 "image-url" : "",
+                 "price": 0,
+                 "detail-page" : ""
+                 }
+                ''')
 
-    lowest_price = 0.0
-    if len(prices):
-        lowest_price = prices[0]
-        
-    json = '''
-    { "return-code" : "true",
+    js = '''
+    { "return-code" : "%s",
+      "title" : "%s",
+      "author" : "%s",
+      "image-url" : "%s",
       "price": "$%2.2f",
       "detail-page" : "%s"
     }
-    ''' % (lowest_price, get_isbn_url(isbn))
+    ''' % (
+        j['return-code'],
+        j['title'],
+        j['author'],
+        j['image-url'],
+        j['price'],
+        get_isbn_url(isbn))
 
-    return json
+
+    return js
         
 
 if __name__ == "__main__":

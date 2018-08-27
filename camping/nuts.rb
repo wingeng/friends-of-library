@@ -108,27 +108,39 @@ module Nuts::Controllers
       @bk_detail_page = ""
 
       if (@input.has_key?("isbn")) then
-        lup =  `cd ..;./isbn-insert.rb isbn.db #{@isbn}`
 
-        @output = JSON.parse(lup)
-        if @output.fetch("return-code", "false") == "false" then
-          @title = "Item not found - " + @isbn
-        else
-          @title = @output.fetch("title", "")
-          @price = @output.fetch("price", "$0.00")
-          @price_f = @price.gsub("$", "").to_f
-          @detail_page = @output.fetch("detail-page", "")
+        # comment out until we get amazon associates id again
+        if false then
+          lup =  `cd ..;./isbn-insert.rb isbn.db #{@isbn}`
+
+          @output = JSON.parse(lup)
+          if @output.fetch("return-code", "false") == "false" then
+            @title = "Item not found - " + @isbn
+          else
+            @title = @output.fetch("title", "")
+            @price = @output.fetch("price", "$0.00")
+            @price_f = @price.gsub("$", "").to_f
+            @detail_page = @output.fetch("detail-page", "")
+          end
         end
 
         if @price_f == 0.0 then
           # Bookfinder prices
           lup = `cd ..;./isbn-bookfinder #{@isbn}`
           @bk_output = JSON.parse(lup)
-          if @bk_output.fetch("return-code", "false") == "true" then
+          @bk_msg = "ret:" + @bk_output.fetch("return-code", "false")
+
+          if @bk_output.fetch("return-code", "false") == "False" then
+            @title = "Not found: " + @isbn
+            @image_url = ""
+          else
+            @title = @bk_output.fetch("title", "Not Found")
+            @image_url = @bk_output.fetch("image-url", "")
             @bk_price = @bk_output.fetch("price", "$0.00")
             @bk_price_f = @bk_price.gsub("$", "").to_f
             @bk_detail_page = @bk_output.fetch("detail-page", "")
           end
+
         end
 
       end
@@ -265,7 +277,7 @@ module Nuts::Views
 
       div :id => "imageandcontent" do
         div :id => "imagesection"  do
-          img :src => @output["image-url"]
+          img :src => @bk_output["image-url"], :style => "width:100px"
         end
 
         div :id => "contentsection" do
@@ -279,7 +291,8 @@ module Nuts::Views
             end
             
             span :id => "to-affiliate" do
-              a :href => @detail_page do "amazon" end
+              # no affiliate now
+              # a :href => @detail_page do "amazon" end
             end
           end
 
