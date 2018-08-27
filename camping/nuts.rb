@@ -296,17 +296,16 @@ module Nuts::Views
             end
           end
 
-          if @bk_price_f > 0.0 then
-            p do
-              span :class => "output", :id => "output-price" do
-                @bk_output["price"]
-              end
+          p do
+            span :class => "output", :id => "output-price" do
+              @bk_output["price"]
+            end
 
-              span :id => "to-affiliate" do
-                a :href => @bk_detail_page do "bookfinder" end
-              end
+            span :id => "to-affiliate" do
+              a :href => @bk_detail_page do "bookfinder" end
             end
           end
+
 
           p do 
             if (@price_f >= @cutoff.to_f || @bk_price_f >= @cutoff.to_f)
