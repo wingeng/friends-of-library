@@ -1,0 +1,53 @@
+#!/usr/local/bin/ruby
+
+price = nil
+title = nil
+author = nil
+picture = nil
+return_code = true
+
+STDIN.each_line do | x|
+  if price == nil and x =~ /data-price=\"([0-9\.]+)/ then
+    price = $1
+  end
+
+  if title == nil and x =~ /describe-isbn-title">(.*)<\/span/ then
+    title = $1
+
+  end
+
+  if author == nil and x =~ /itemprop="author">(.*)<\/span/ then
+    author = $1
+  end
+
+  if picture == nil and x =~ /id="coverImage" src="([^\"]+)"/ then
+    picture = $1
+  end
+
+  if price and title and author and picture then
+    break
+  end
+end
+
+title.gsub!(/"/, "") if title
+author.gsub!(/"/, "") if author
+
+if title == nil then
+  title = "Couldn't find"
+  return_code = false
+end
+
+price = 0.0 if price == nil
+title = "not-found: " if title == nil
+author = "" if author == nil
+picture = "" if picture == nil
+
+puts <<END
+{
+   "return-code" : #{return_code},
+   "title" : "#{title}",
+   "author" : "#{author}",
+   "price" : #{price},
+   "image-url" : "#{picture}"
+}
+END
